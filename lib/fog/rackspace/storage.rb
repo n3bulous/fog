@@ -151,7 +151,7 @@ module Fog
             uri = URI.parse(@rackspace_storage_url)
           end
           if @rackspace_storage_url && @rackspace_storage_url.strip != ""
-            storage_host = Uri.parse(@rackspace_storage_url).host
+            storage_host = URI.parse(@rackspace_storage_url).host
             @host   = @rackspace_servicenet == true ? "snet-#{storage_host}" : storage_host
           else
             @host   = @rackspace_servicenet == true ? "snet-#{uri.host}" : uri.host
