@@ -6,7 +6,7 @@ module Fog
     class Rackspace < Fog::Service
 
       requires :rackspace_api_key, :rackspace_username
-      recognizes :rackspace_auth_url, :rackspace_servicenet, :rackspace_cdn_ssl, :persistent
+      recognizes :rackspace_auth_url, :rackspace_servicenet, :rackspace_cdn_ssl, :persistent, :rackspace_storage_url
       recognizes :rackspace_temp_url_key
 
       model_path 'fog/rackspace/models/storage'
@@ -150,7 +150,12 @@ module Fog
             @auth_token = @rackspace_auth_token
             uri = URI.parse(@rackspace_storage_url)
           end
-          @host   = @rackspace_servicenet == true ? "snet-#{uri.host}" : uri.host
+          if @rackspace_storage_url && @rackspace_storage_url.strip != ""
+            storage_host = Uri.parse(@rackspace_storage_url).host
+            @host   = @rackspace_servicenet == true ? "snet-#{storage_host}" : storage_host
+          else
+            @host   = @rackspace_servicenet == true ? "snet-#{uri.host}" : uri.host
+          end
           @path   = uri.path
           @port   = uri.port
           @scheme = uri.scheme
